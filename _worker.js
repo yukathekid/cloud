@@ -15,22 +15,16 @@ export default {
         const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media&token=${token}`;
 
         try {
-          // Faz a requisição ao Firebase para verificar se o link é válido
           const response = await fetch(realUrl, {
-            method: 'GET',
+            method: request.method,
             headers: request.headers,
           });
 
-          if (response.ok) {
-            // Se o link for válido, retorna o vídeo
-            return new Response(response.body, {
-              status: response.status,
-              statusText: response.statusText,
-              headers: response.headers
-            });
-          } else {
-            return new Response('Token inválido para o episódio especificado', { status: 403 });
-          }
+          return new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.headers
+          });
         } catch (error) {
           return new Response('Erro ao acessar o conteúdo.', { status: 500 });
         }
