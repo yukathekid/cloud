@@ -1,13 +1,18 @@
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
     // Novo bloco para camuflagem de URL
-    if (url.pathname === '/cdn/hls') {
-      const ep = url.searchParams.get('ep');
+    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)\.mp4$/;
+    const match = url.pathname.match(hlsPathPattern);
+
+    if (match) {
+      const folder = match[1];
+      const ep = match[2];
       const token = url.searchParams.get('token');
 
-      if (ep && token) {
-        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fwind-breaker%2F${ep}.mp4?alt=media&token=${token}`;
+      if (token) {
+        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media&token=${token}`;
 
         try {
           const response = await fetch(realUrl, {
@@ -24,11 +29,11 @@ export default {
           return new Response('Erro ao acessar o conteúdo.', { status: 500 });
         }
       } else {
-        return new Response('Parâmetros inválidos', { status: 400 });
+        return new Response('Parâmetro "token" inválido', { status: 400 });
       }
     }
 
-    // Let other requests be handled by Cloudflare Pages and _redirects
+    // Deixa outras requisições serem tratadas pelo Cloudflare Pages e _redirects
     return env.ASSETS.fetch(request);
   }
 };
