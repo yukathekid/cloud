@@ -11,25 +11,25 @@ export default {
       const ep = match[2];
       const token = url.searchParams.get('token');
 
-      if (token) {
-        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media&token=${token}`;
+      if (!token) {
+        return new Response('Parâmetro "token" não encontrado.', { status: 400 });
+      }
 
-        try {
-          const response = await fetch(realUrl, {
-            method: request.method,
-            headers: request.headers,
-          });
+      const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media&token=${token}`;
 
-          return new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers: response.headers
-          });
-        } catch (error) {
-          return new Response('Erro ao acessar o conteúdo.', { status: 500 });
-        }
-      } else {
-        return new Response('Parâmetro "token" inválido', { status: 400 });
+      try {
+        const response = await fetch(realUrl, {
+          method: request.method,
+          headers: request.headers,
+        });
+
+        return new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers
+        });
+      } catch (error) {
+        return new Response('Erro ao acessar o conteúdo.', { status: 500 });
       }
     }
 
