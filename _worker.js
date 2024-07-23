@@ -9,13 +9,8 @@ export default {
     if (match) {
       const folder = match[1];
       const ep = match[2];
-      const token = url.searchParams.get('token');
 
-      if (!token) {
-        return new Response('Parâmetro "token" não encontrado.', { status: 400 });
-      }
-
-      const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media&token=${token}`;
+      const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
 
       try {
         const response = await fetch(realUrl, {
