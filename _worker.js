@@ -17,21 +17,16 @@ export default {
         try {
           // Faz a requisição ao Firebase para verificar se o link é válido
           const response = await fetch(realUrl, {
-            method: 'HEAD', // Usamos o método HEAD para verificar apenas os headers
+            method: 'GET',
             headers: request.headers,
           });
 
           if (response.ok) {
-            // Se o link for válido, faz a requisição completa
-            const videoResponse = await fetch(realUrl, {
-              method: request.method,
-              headers: request.headers,
-            });
-
-            return new Response(videoResponse.body, {
-              status: videoResponse.status,
-              statusText: videoResponse.statusText,
-              headers: videoResponse.headers
+            // Se o link for válido, retorna o vídeo
+            return new Response(response.body, {
+              status: response.status,
+              statusText: response.statusText,
+              headers: response.headers
             });
           } else {
             return new Response('Token inválido para o episódio especificado', { status: 403 });
