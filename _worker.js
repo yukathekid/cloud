@@ -3,15 +3,14 @@ export default {
     const url = new URL(request.url);
 
     // Novo bloco para camuflagem de URL com MD5
-    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([a-fA-F0-9]{32})$/;
+    const hlsPathPattern = /^\/cdn\/hls\/([a-fA-F0-9]{32})$/;
     const match = url.pathname.match(hlsPathPattern);
 
     if (match) {
-      const anime = match[1];
-      const md5Hash = match[2];
+      const md5Hash = match[1];
 
       // URL para o arquivo JSON do Firebase
-      const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2Fmaster.json?alt=media`;
+      const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fmaster.json?alt=media`;
 
       try {
         const jsonResponse = await fetch(jsonUrl);
@@ -20,11 +19,12 @@ export default {
         }
 
         const jsonData = await jsonResponse.json();
-        const decodedPath = Object.values(jsonData).flat().find(entry => entry[md5Hash]);
+        const animeEpisodeMapping = Object.values(jsonData).flat().find(entry => entry[md5Hash]);
 
-        if (decodedPath) {
-          const [animePath, episode] = decodedPath.split('/');
-          const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animePath}%2F${episode}.mp4?alt=media`;
+        if (animeEpisodeMapping) {
+          const decodedPath = animeEpisodeMapping[md5Hash];
+          const [anime, episode] = decodedPath.split('/');
+          const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2F${episode}.mp4?alt=media`;
 
           const response = await fetch(realUrl, {
             method: request.method,
