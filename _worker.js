@@ -2,29 +2,80 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // Novo bloco para camuflagem de URL
-    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)\.mp4$/;
-    const match = url.pathname.match(hlsPathPattern);
+    // Padrão para a lista de episódios
+    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)$/;
+    const matchList = url.pathname.match(hlsPathPattern);
 
-    if (match) {
-      const folder = match[1];
-      const ep = match[2];
+    if (matchList) {
+      const anime = matchList[1];
 
-      const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
+      // Busca o arquivo master.json do anime
+      const masterJsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2Fmaster.json?alt=media`;
+      let episodeData;
 
       try {
-        const response = await fetch(realUrl, {
-          method: request.method,
-          headers: request.headers,
-        });
-
-        return new Response(response.body, {
-          status: response.status,
-          statusText: response.statusText,
-          headers: response.headers
-        });
+        const response = await fetch(masterJsonUrl);
+        episodeData = await response.json();
       } catch (error) {
-        return new Response('Erro ao acessar o conteúdo.', { status: 500 });
+        return new Response('Erro ao acessar o arquivo master.json.', { status: 500 });
+      }
+
+      // Gera a lista JSON com os links camuflados
+      const episodeLinks = Object.keys(episodeData).map(ep => {
+        const { token, URL } = episodeData[ep];
+        // Cria uma URL camuflada com o token incluído
+        const camouflagedUrl = `https://cloud.anikodi.xyz/cdn/hls/${anime}/${ep}?token=${token}`;
+        return { [ep]: camouflagedUrl };
+      });
+
+      // Retorna a lista JSON como resposta
+      return new Response(JSON.stringify(episodeLinks), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Padrão para decodificação e redirecionamento do link camuflado
+    const hlsEpisodePattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
+    const matchEpisode = url.pathname.match(hlsEpisodePattern);
+
+    if (matchEpisode) {
+      const anime = matchEpisode[1];
+      const ep = matchEpisode[2];
+      const token = url.searchParams.get('token');
+
+      // Busca o arquivo master.json do anime
+      const masterJsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2Fmaster.json?alt=media`;
+      let episodeData;
+
+      try {
+        const response = await fetch(masterJsonUrl);
+        episodeData = await response.json();
+      } catch (error) {
+        return new Response('Erro ao acessar o arquivo master.json.', { status: 500 });
+      }
+
+      const episodeInfo = episodeData[ep];
+
+      // Verifica se o token corresponde ao do episódio
+      if (episodeInfo && episodeInfo.token === token) {
+        const realUrl = episodeInfo.URL + `?token=${token}`;
+
+        try {
+          const response = await fetch(realUrl, {
+            method: request.method,
+            headers: request.headers,
+          });
+
+          return new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.headers
+          });
+        } catch (error) {
+          return new Response('Erro ao acessar o conteúdo.', { status: 500 });
+        }
+      } else {
+        return new Response('Token inválido ou episódio não encontrado.', { status: 403 });
       }
     }
 
