@@ -15,8 +15,12 @@ export default {
 
       try {
         const response = await fetch(masterJsonUrl);
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar master.json: ${response.statusText}`);
+        }
         episodeData = await response.json();
       } catch (error) {
+        console.error(`Erro ao acessar o arquivo master.json: ${error.message}`);
         return new Response('Erro ao acessar o arquivo master.json.', { status: 500 });
       }
 
@@ -49,8 +53,12 @@ export default {
 
       try {
         const response = await fetch(masterJsonUrl);
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar master.json: ${response.statusText}`);
+        }
         episodeData = await response.json();
       } catch (error) {
+        console.error(`Erro ao acessar o arquivo master.json: ${error.message}`);
         return new Response('Erro ao acessar o arquivo master.json.', { status: 500 });
       }
 
