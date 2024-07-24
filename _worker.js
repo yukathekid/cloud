@@ -2,50 +2,27 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // Novo bloco para camuflagem de URL
-    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
-    const match = url.pathname.match(hlsPathPattern);
+    // Verifica se a URL é para um JSON de anime específico
+    const animePattern = /^\/cdn\/hls\/([^\/]+)$/;
+    const match = url.pathname.match(animePattern);
 
     if (match) {
-      const folder = match[1];
-      const token = match[2];
+      const anime = match[1];
 
-      // URL para buscar os metadados do arquivo
-      const metadataUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}.mp4`;
+      // Defina sua lógica de episódios aqui - exemplo estático para ilustração
+      const episodes = ['ep1', 'ep2', 'ep3']; // Exemplo de episódios
 
-      try {
-        // Fetch para obter os metadados do arquivo
-        const metadataResponse = await fetch(metadataUrl);
-        if (!metadataResponse.ok) {
-          return new Response('Erro ao acessar os metadados do conteúdo.', { status: 500 });
-        }
+      // Gera a lista JSON com links em Base64
+      const episodeLinks = episodes.map(ep => {
+        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2F${ep}.mp4?alt=media`;
+        const base64Url = btoa(realUrl);
+        return { [ep]: `https://cloud.anikodi.xyz/cdn/hls/${base64Url}` };
+      });
 
-        // Extrair metadados do arquivo
-        const metadata = await metadataResponse.json();
-        const actualToken = metadata.downloadTokens;
-
-        // Verificar se o token na URL camuflada é o mesmo dos metadados
-        if (actualToken !== token) {
-          return new Response('Token de download inválido.', { status: 403 });
-        }
-
-        // Construir a URL real com o token de download
-        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}.mp4?alt=media&token=${token}`;
-
-        // Fetch para obter o vídeo
-        const response = await fetch(realUrl, {
-          method: request.method,
-          headers: request.headers,
-        });
-
-        return new Response(response.body, {
-          status: response.status,
-          statusText: response.statusText,
-          headers: response.headers
-        });
-      } catch (error) {
-        return new Response('Erro ao acessar o conteúdo.', { status: 500 });
-      }
+      // Retorna a lista JSON como resposta
+      return new Response(JSON.stringify(episodeLinks), {
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Deixa outras requisições serem tratadas pelo Cloudflare Pages e _redirects
