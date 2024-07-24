@@ -19,6 +19,7 @@ export default {
         // Buscar o JSON
         const jsonResponse = await fetch(jsonUrl);
         if (!jsonResponse.ok) {
+          console.error(`JSON fetch failed with status: ${jsonResponse.status}`);
           throw new Error(`JSON fetch failed with status: ${jsonResponse.status}`);
         }
         const jsonData = await jsonResponse.json();
@@ -37,6 +38,7 @@ export default {
             headers: request.headers,
           });
           if (!videoResponse.ok) {
+            console.error(`Video fetch failed with status: ${videoResponse.status}`);
             throw new Error(`Video fetch failed with status: ${videoResponse.status}`);
           }
 
