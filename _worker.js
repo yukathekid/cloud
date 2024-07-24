@@ -2,47 +2,29 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // Padrão para camuflagem de URL
-    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)$/;
+    // Novo bloco para camuflagem de URL
+    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)\.mp4$/;
     const match = url.pathname.match(hlsPathPattern);
 
     if (match) {
-      const anime = match[1];
+      const folder = match[1];
+      const ep = match[2];
 
-      // Verifica se o URL termina com um hash Base64
-      if (anime.endsWith('=')) {
-        // Decodifica o URL Base64
-        const decodedUrl = atob(anime);
+      const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
 
-        try {
-          const response = await fetch(decodedUrl, {
-            method: request.method,
-            headers: request.headers,
-          });
-
-          return new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers: response.headers
-          });
-        } catch (error) {
-          return new Response('Erro ao acessar o conteúdo.', { status: 500 });
-        }
-      } else {
-        // Substitua essa parte pela lógica de geração de links de episódios reais
-        const episodes = ['ep1', 'ep2', 'ep3']; // Exemplo de episódios
-
-        // Gera a lista JSON com links em Base64
-        const episodeLinks = episodes.map(ep => {
-          const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2F${ep}.mp4?alt=media`;
-          const base64Url = btoa(realUrl);
-          return { [ep]: `https://cloud.anikodi.xyz/cdn/hls/${base64Url}` };
+      try {
+        const response = await fetch(realUrl, {
+          method: request.method,
+          headers: request.headers,
         });
 
-        // Retorna a lista JSON como resposta
-        return new Response(JSON.stringify(episodeLinks), {
-          headers: { 'Content-Type': 'application/json' }
+        return new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers
         });
+      } catch (error) {
+        return new Response('Erro ao acessar o conteúdo.', { status: 500 });
       }
     }
 
