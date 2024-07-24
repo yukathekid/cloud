@@ -10,7 +10,7 @@ export default {
       const md5hash = match[1];
 
       // Busca o JSON do anime para obter o mapeamento
-      const jsonUrlPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
+      const jsonUrlPattern = /^\/cdn\/hls\/([^\/]+)$/;
       const animeMatch = url.pathname.match(jsonUrlPattern);
 
       if (animeMatch) {
