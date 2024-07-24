@@ -20,7 +20,7 @@ export default {
         const jsonResponse = await fetch(jsonUrl);
         if (!jsonResponse.ok) {
           console.error(`JSON fetch failed with status: ${jsonResponse.status}`);
-          throw new Error(`JSON fetch failed with status: ${jsonResponse.status}`);
+          return new Response('Erro ao acessar o JSON.', { status: 500 });
         }
         const jsonData = await jsonResponse.json();
         console.log('JSON Data:', jsonData);
@@ -29,24 +29,11 @@ export default {
         const episodeData = jsonData[episode];
         if (episodeData) {
           const token = episodeData.token;
-          const realUrl = `https://cloud.anikodi.xyz/cdn/hls/${anime}/${token}`;
-          console.log('Fetching video URL:', realUrl);
+          const camouflagedUrl = `https://cloud.anikodi.xyz/cdn/hls/${anime}/${token}`;
+          console.log('Camouflaged URL:', camouflagedUrl);
 
-          // Buscar o vídeo real
-          const videoResponse = await fetch(realUrl, {
-            method: request.method,
-            headers: request.headers,
-          });
-          if (!videoResponse.ok) {
-            console.error(`Video fetch failed with status: ${videoResponse.status}`);
-            throw new Error(`Video fetch failed with status: ${videoResponse.status}`);
-          }
-
-          return new Response(videoResponse.body, {
-            status: videoResponse.status,
-            statusText: videoResponse.statusText,
-            headers: videoResponse.headers
-          });
+          // Redirecionar para a URL camuflada
+          return Response.redirect(camouflagedUrl, 302);
         } else {
           return new Response('Episódio não encontrado.', { status: 404 });
         }
