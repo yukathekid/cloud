@@ -2,31 +2,32 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // Novo bloco para camuflagem de URL com MD5
-    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([a-fA-F0-9]{32})$/;
+    // Padrão para camuflagem de URL
+    const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)$/;
     const match = url.pathname.match(hlsPathPattern);
 
     if (match) {
-      const anime = match[1];  // Nome do anime
-      const md5Hash = match[2];  // Hash MD5
+      const md5hash = match[1];
 
-      // URL para o arquivo JSON do Firebase, incluindo o nome do anime
-      const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2Fmaster.json?alt=media`;
+      // Busca o JSON do anime para obter o mapeamento
+      const jsonUrlPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
+      const animeMatch = url.pathname.match(jsonUrlPattern);
 
-      try {
-        const jsonResponse = await fetch(jsonUrl);
-        
-        if (!jsonResponse.ok) {
-          return new Response('Erro ao acessar o mapeamento de dados: ' + jsonResponse.statusText, { status: jsonResponse.status });
-        }
+      if (animeMatch) {
+        const animeName = animeMatch[1];
+        const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
 
-        const jsonData = await jsonResponse.json();
-        const animeData = jsonData[md5Hash];
+        try {
+          const jsonResponse = await fetch(jsonUrl);
+          const jsonData = await jsonResponse.json();
 
-        if (animeData) {
-          const decodedPath = animeData[md5Hash];
-          const [anime, episode] = decodedPath.split('/');
-          const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${anime}%2F${episode}.mp4?alt=media`;
+          const realPath = jsonData[md5hash];
+          if (!realPath) {
+            return new Response('Conteúdo não encontrado.', { status: 404 });
+          }
+
+          const [folder, ep] = realPath.split('/');
+          const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
 
           const response = await fetch(realUrl, {
             method: request.method,
@@ -38,11 +39,11 @@ export default {
             statusText: response.statusText,
             headers: response.headers
           });
-        } else {
-          return new Response('Caminho inválido no mapeamento.', { status: 400 });
+        } catch (error) {
+          return new Response('Erro ao acessar o conteúdo.', { status: 500 });
         }
-      } catch (error) {
-        return new Response('Erro ao acessar o mapeamento de dados: ' + error.message, { status: 500 });
+      } else {
+        return new Response('Formato de URL inválido.', { status: 400 });
       }
     }
 
