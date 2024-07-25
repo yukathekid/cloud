@@ -7,34 +7,26 @@ export default {
     const match = url.pathname.match(hlsPathPattern);
 
     if (match) {
-      const animeBase64 = match[1];
+      const animeMd5 = match[1];
       const md5hash = match[2];
       
+      // URL do JSON principal que mapeia animeMd5 para animeName
       const jsonUrlMain = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fmaster.json?alt=media`;
 
-      const jsonResponseMain = await fetch(jsonUrlMain);
-      const jsonDataMain = await jsonResponseMain.json();
-
-      const realPathMain = jsonDataMain[animeBase64];
-      if (!realPathMain) {
-        return new Response('Conteúdo não encontrado. 2', { status: 404 });
-        }
-      
-        
-
-      // Função para decodificar Base64
-      /*function decodeBase64(base64) {
-        return decodeURIComponent(atob(base64).split('').map(c => 
-          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        ).join(''));
-      }*/
-
-      const animeName = realPathMain; //decodeBase64(animeBase64);
-
-      // URL do JSON específico do anime
-      const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
-
       try {
+        const jsonResponseMain = await fetch(jsonUrlMain);
+        const jsonDataMain = await jsonResponseMain.json();
+
+        const realPathMain = jsonDataMain[animeMd5];
+        if (!realPathMain) {
+          return new Response('Conteúdo não encontrado. 2', { status: 404 });
+        }
+
+        const animeName = realPathMain;
+
+        // URL do JSON específico do anime
+        const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
+
         const jsonResponse = await fetch(jsonUrl);
         const jsonData = await jsonResponse.json();
 
