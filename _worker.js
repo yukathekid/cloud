@@ -52,7 +52,9 @@ export default {
 
         console.log(`Real path found: ${realPath}`);
 
-        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${realPath}.mp4?alt=media`;
+        const [folder, ep] = realPath.split('/');
+        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
+        
         console.log(`Fetching video from: ${realUrl}`);
 
         const response = await fetch(realUrl, {
