@@ -72,7 +72,7 @@ export default {
         });
       } catch (error) {
         console.error(`Catch error: ${error.message}`);
-        return new Response('Erro ao acessar o conteúdo.', { status: 500 });
+        return new Response(`Erro ao acessar o conteúdo: ${error.message}`, { status: 500 });
       }
     }
 
