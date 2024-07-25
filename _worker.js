@@ -12,15 +12,14 @@ export default {
       
       const jsonUrlMain = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fmaster.json?alt=media`;
 
-      try {
-        const jsonResponseMain = await fetch(jsonUrlMain);
-        const jsonDataMain = await jsonResponseMain.json();
+      const jsonResponseMain = await fetch(jsonUrlMain);
+      const jsonDataMain = await jsonResponseMain.json();
 
-        const realPathMain = jsonDataMain[animeBase64];
-        if (!realPathMain) {
-          return new Response('Conteúdo não encontrado. 2', { status: 404 });
+      const realPathMain = jsonDataMain[animeBase64];
+      if (!realPathMain) {
+        return new Response('Conteúdo não encontrado. 2', { status: 404 });
         }
-      }
+      
         
 
       // Função para decodificar Base64
