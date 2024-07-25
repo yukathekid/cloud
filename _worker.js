@@ -62,7 +62,7 @@ export default {
 
         if (!response.ok) {
           console.error(`Failed to fetch video: ${response.statusText}`);
-          return new Response('Erro ao acessar o vídeo.', { status: 500 });
+          return new Response(`Erro ao acessar o vídeo:\n ${response.statusText}`, { status: 500 });
         }
 
         return new Response(response.body, {
