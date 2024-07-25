@@ -8,16 +8,16 @@ export default {
 
     if (match) {
       const animeName = match[1];
-      const md5hash = match[2];
+      const eps = match[2];
 
       // URL do JSON específico do anime
-      const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
+      const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2F${eps}.mp4`;
 
       try {
         const jsonResponse = await fetch(jsonUrl);
         const jsonData = await jsonResponse.json();
 
-        const realPath = jsonData[md5hash];
+        const realPath = jsonData.downloadTokens;
         if (!realPath) {
           return new Response('Conteúdo não encontrado.', { status: 404 });
         }
