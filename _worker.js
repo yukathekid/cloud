@@ -4,7 +4,9 @@ export default {
 
     // Padrão para camuflagem de URL
     const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
-    const match = url.pathname.match(hlsPathPattern);
+    const m3uPathPattern = /^\/cdn\/play\/([^\/]+)\/([^\/]+)\.m3u8$/;
+    
+    let match = url.pathname.match(hlsPathPattern);
 
     if (match) {
       const animeMd5 = match[1];
@@ -14,10 +16,8 @@ export default {
       const jsonUrlMain = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fmaster.json?alt=media`;
 
       try {
-        console.log(`Fetching main JSON from: ${jsonUrlMain}`);
         const jsonResponseMain = await fetch(jsonUrlMain);
         if (!jsonResponseMain.ok) {
-          console.error(`Failed to fetch main JSON: ${jsonResponseMain.statusText}`);
           return new Response('security error', { status: 500 });
         }
 
@@ -25,20 +25,16 @@ export default {
 
         const realPathMain = jsonDataMain[animeMd5];
         if (!realPathMain) {
-          console.error(`animeMd5 not found in main JSON: ${animeMd5}`);
           return new Response('not found', { status: 404 });
         }
 
         const animeName = realPathMain;
-        console.log(`Anime name found: ${animeName}`);
 
         // URL do JSON específico do anime
         const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
-        console.log(`Fetching anime JSON from: ${jsonUrl}`);
 
         const jsonResponse = await fetch(jsonUrl);
         if (!jsonResponse.ok) {
-          console.error(`Failed to fetch anime JSON: ${jsonResponse.statusText}`);
           return new Response('security error.', { status: 500 });
         }
 
@@ -46,16 +42,11 @@ export default {
 
         const realPath = jsonData[md5hash];
         if (!realPath) {
-          console.error(`md5hash not found in anime JSON: ${md5hash}`);
           return new Response('security error.', { status: 404 });
         }
 
-        console.log(`Real path found: ${realPath}`);
-
         const [folder, ep] = realPath.split('/');
         const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
-        
-        console.log(`Fetching video from: ${realUrl}`);
 
         const response = await fetch(realUrl, {
           method: request.method,
@@ -67,11 +58,8 @@ export default {
         });
 
         if (!response.ok) {
-          console.error(`Failed to fetch video: ${response.statusText}`);
           return new Response(`security error`, { status: 500 });
         }
-
-        console.log(`Video fetched successfully with status: ${response.status}`);
 
         return new Response(response.body, {
           status: response.status,
@@ -79,8 +67,62 @@ export default {
           headers: response.headers
         });
       } catch (error) {
-        console.error(`Catch error: ${error.message}`);
         return new Response(`security error`, { status: 500 });
+      }
+    } 
+    
+    // Nova rota para gerar o arquivo M3U
+    match = url.pathname.match(m3uPathPattern);
+    if (match) {
+      const animeName = match[1];
+      const ep = match[2];
+
+      try {
+        // URL do JSON principal que mapeia animeMd5 para animeName
+        const jsonUrlMain = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fmaster.json?alt=media`;
+
+        const jsonResponseMain = await fetch(jsonUrlMain);
+        if (!jsonResponseMain.ok) {
+          return new Response('Erro ao acessar o conteúdo principal.', { status: 500 });
+        }
+
+        const jsonDataMain = await jsonResponseMain.json();
+
+        const animeMd5 = Object.keys(jsonDataMain).find(key => jsonDataMain[key] === animeName);
+        if (!animeMd5) {
+          return new Response('Conteúdo não encontrado no JSON principal.', { status: 404 });
+        }
+
+        // URL do JSON específico do anime
+        const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
+
+        const jsonResponse = await fetch(jsonUrl);
+        if (!jsonResponse.ok) {
+          return new Response('Erro ao acessar o conteúdo do anime.', { status: 500 });
+        }
+
+        const jsonData = await jsonResponse.json();
+
+        const md5hash = Object.keys(jsonData).find(key => jsonData[key] === `${animeName}/${ep}`);
+        if (!md5hash) {
+          return new Response('Conteúdo não encontrado no JSON do anime.', { status: 404 });
+        }
+
+        const camouflagedUrl = `https://cloud.anikodi.xyz/cdn/hls/${animeMd5}/${md5hash}`;
+        
+        const m3uContent = `
+#EXTM3U
+#EXTINF:-1,${animeName} ${ep}
+${camouflagedUrl}
+        `;
+
+        return new Response(m3uContent.trim(), {
+          headers: {
+            'Content-Type': 'application/vnd.apple.mpegurl',
+          },
+        });
+      } catch (error) {
+        return new Response(`Erro ao acessar o conteúdo: ${error.message}`, { status: 500 });
       }
     }
 
