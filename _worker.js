@@ -18,7 +18,7 @@ export default {
         const jsonResponseMain = await fetch(jsonUrlMain);
         if (!jsonResponseMain.ok) {
           console.error(`Failed to fetch main JSON: ${jsonResponseMain.statusText}`);
-          return new Response('Erro ao acessar o conteúdo principal.', { status: 500 });
+          return new Response('security error', { status: 500 });
         }
 
         const jsonDataMain = await jsonResponseMain.json();
@@ -26,7 +26,7 @@ export default {
         const realPathMain = jsonDataMain[animeMd5];
         if (!realPathMain) {
           console.error(`animeMd5 not found in main JSON: ${animeMd5}`);
-          return new Response('Conteúdo não encontrado no JSON principal.', { status: 404 });
+          return new Response('not found', { status: 404 });
         }
 
         const animeName = realPathMain;
@@ -39,7 +39,7 @@ export default {
         const jsonResponse = await fetch(jsonUrl);
         if (!jsonResponse.ok) {
           console.error(`Failed to fetch anime JSON: ${jsonResponse.statusText}`);
-          return new Response('Erro ao acessar o conteúdo do anime.', { status: 500 });
+          return new Response('security error.', { status: 500 });
         }
 
         const jsonData = await jsonResponse.json();
@@ -47,7 +47,7 @@ export default {
         const realPath = jsonData[md5hash];
         if (!realPath) {
           console.error(`md5hash not found in anime JSON: ${md5hash}`);
-          return new Response('Conteúdo não encontrado no JSON do anime.', { status: 404 });
+          return new Response('security error.', { status: 404 });
         }
 
         console.log(`Real path found: ${realPath}`);
@@ -68,7 +68,7 @@ export default {
 
         if (!response.ok) {
           console.error(`Failed to fetch video: ${response.statusText}`);
-          return new Response(`Erro ao acessar o vídeo:\n ${response.statusText}`, { status: 500 });
+          return new Response(`security error`, { status: 500 });
         }
 
         console.log(`Video fetched successfully with status: ${response.status}`);
@@ -80,7 +80,7 @@ export default {
         });
       } catch (error) {
         console.error(`Catch error: ${error.message}`);
-        return new Response(`Erro ao acessar o conteúdo: ${error.message}`, { status: 500 });
+        return new Response(`security error`, { status: 500 });
       }
     }
 
