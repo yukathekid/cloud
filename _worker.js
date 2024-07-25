@@ -59,13 +59,19 @@ export default {
 
         const response = await fetch(realUrl, {
           method: request.method,
-          headers: request.headers,
+          headers: {
+            ...request.headers,
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          },
         });
 
         if (!response.ok) {
           console.error(`Failed to fetch video: ${response.statusText}`);
           return new Response(`Erro ao acessar o vídeo:\n ${response.statusText}`, { status: 500 });
         }
+
+        console.log(`Video fetched successfully with status: ${response.status}`);
 
         return new Response(response.body, {
           status: response.status,
