@@ -7,8 +7,17 @@ export default {
     const match = url.pathname.match(hlsPathPattern);
 
     if (match) {
-      const animeName = match[1];
+      const animeBase64 = match[1];
       const md5hash = match[2];
+
+      // Função para decodificar Base64
+      function decodeBase64(base64) {
+        return decodeURIComponent(atob(base64).split('').map(c => 
+          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+      }
+
+      const animeName = decodeBase64(animeBase64);
 
       // URL do JSON específico do anime
       const jsonUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2Fmaster.json?alt=media`;
@@ -19,7 +28,7 @@ export default {
 
         const realPath = jsonData[md5hash];
         if (!realPath) {
-          return new Response('Not found', { status: 404 });
+          return new Response('Conteúdo não encontrado.', { status: 404 });
         }
 
         const [folder, ep] = realPath.split('/');
