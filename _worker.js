@@ -19,7 +19,7 @@ export default {
 
         const realPath = jsonData[md5hash];
         if (!realPath) {
-          return new Response('Conteúdo não encontrado.', { status: 404 });
+          return new Response('Not found', { status: 404 });
         }
 
         const [folder, ep] = realPath.split('/');
