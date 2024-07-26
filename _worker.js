@@ -5,13 +5,13 @@ export default {
     // Padrão para camuflagem de URL
     const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
     const m3uPathPattern = /^\/cdn\/play\/([^\/]+)\/([^\/]+)\.m3u8$/;
-    
+
     let match = url.pathname.match(hlsPathPattern);
 
     if (match) {
       const animeMd5 = match[1];
       const md5hash = match[2];
-      
+
       // URL do JSON principal que mapeia animeMd5 para animeName
       const jsonUrlMain = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fmaster.json?alt=media`;
 
@@ -69,8 +69,8 @@ export default {
       } catch (error) {
         return new Response(`security error`, { status: 500 });
       }
-    } 
-    
+    }
+
     // Nova rota para gerar o arquivo M3U
     match = url.pathname.match(m3uPathPattern);
     if (match) {
@@ -109,11 +109,15 @@ export default {
         }
 
         const camouflagedUrl = `https://cloud.anikodi.xyz/cdn/hls/${animeMd5}/${md5hash}`;
-        
+
         const m3uContent = `
 #EXTM3U
-#EXTINF:-1,${animeName} ${ep}
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:10
+#EXT-X-MEDIA-SEQUENCE:0
+#EXTINF:10,
 ${camouflagedUrl}
+#EXT-X-ENDLIST
         `;
 
         return new Response(m3uContent.trim(), {
