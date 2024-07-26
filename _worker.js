@@ -5,7 +5,7 @@ export default {
     // Padrão para camuflagem de URL
     const hlsPathPattern = /^\/cdn\/hls\/([^\/]+)\/([^\/]+)$/;
     const m3uPathPattern = /^\/cdn\/play\/([^\/]+)\/([^\/]+)\.m3u8$/;
-
+    
     let match = url.pathname.match(hlsPathPattern);
 
     if (match) {
@@ -70,7 +70,7 @@ export default {
         return new Response(`security error`, { status: 500 });
       }
     }
-
+    
     // Nova rota para gerar o arquivo M3U
     match = url.pathname.match(m3uPathPattern);
     if (match) {
@@ -109,13 +109,14 @@ export default {
         }
 
         const camouflagedUrl = `https://cloud.anikodi.xyz/cdn/hls/${animeMd5}/${md5hash}`;
-
+        
+        // Ajustando o tempo total para 23:55
         const m3uContent = `
 #EXTM3U
 #EXT-X-VERSION:3
-#EXT-X-TARGETDURATION:10
+#EXT-X-TARGETDURATION:60
 #EXT-X-MEDIA-SEQUENCE:0
-#EXTINF:10,
+#EXTINF:1435, ${animeName} ${ep}
 ${camouflagedUrl}
 #EXT-X-ENDLIST
         `;
