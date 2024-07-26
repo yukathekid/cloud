@@ -111,13 +111,9 @@ export default {
         const camouflagedUrl = `https://cloud.anikodi.xyz/cdn/hls/${animeMd5}/${md5hash}`;
         
         const m3uContent = `
-EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-TARGETDURATION:10
-#EXT-X-MEDIA-SEQUENCE:0
-#EXTINF:10,
+#EXTM3U
+#EXTINF:-1,${animeName} ${ep}
 ${camouflagedUrl}
-#EXT-X-ENDLIST
         `;
 
         return new Response(m3uContent.trim(), {
