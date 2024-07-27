@@ -108,7 +108,7 @@ export default {
 
         const [folder, ep] = realPath.split('/');
 
-        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
+        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.ts?alt=media`;
 
         
 
