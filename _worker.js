@@ -108,55 +108,11 @@ export default {
 
         const [folder, ep] = realPath.split('/');
 
-        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.ts?alt=media`;
+        const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${folder}%2F${ep}.mp4?alt=media`;
 
         
 
         console.log(`Fetching video from: ${realUrl}`);
-
-
-
-        const response = await fetch(realUrl, {
-
-          method: request.method,
-
-          headers: {
-
-            ...request.headers,
-
-            'Cache-Control': 'no-cache',
-
-            'Pragma': 'no-cache',
-
-          },
-
-        });
-
-
-
-        if (!response.ok) {
-
-          console.error(`Failed to fetch video: ${response.statusText}`);
-
-          return new Response(`security error`, { status: 500 });
-
-        }
-
-
-
-        console.log(`Video fetched successfully with status: ${response.status}`);
-
-
-
-        return new Response(response.body, {
-
-          status: response.status,
-
-          statusText: response.statusText,
-
-          headers: response.headers
-
-        });
 
       } catch (error) {
 
