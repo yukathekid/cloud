@@ -1,8 +1,3 @@
 #EXTM3U
 #EXTINF:29.90, Segment 046
-https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fwind-breaker%2F01%2Fsegment_046.ts?alt=media&token=422e1b85-f3c0-4fbd-bd55-bf50d911a1e2
-#EXTINF:29.90, Segment 047
-https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fwind-breaker%2F01%2Fsegment_047.ts?alt=media&token=422e1b85-f3c0-4fbd-bd55-bf50d911a1e2
-#EXTINF:29.90, Segment 048
-https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2Fwind-breaker%2F01%2Fsegment_048.ts?alt=media&token=422e1b85-f3c0-4fbd-bd55-bf50d911a1e2
-#EXT-X-ENDLIST
+https://cloud.anikodi.xyz/cdn/hls/95b72c9d2517b85463d4083158e49fa7/d3709f98252b7aa069f9cf5022d27ced
