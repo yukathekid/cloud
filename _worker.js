@@ -23,14 +23,6 @@ export default {
         if (!videoResponse.ok) {
           return new Response('Video fetch error.', { status: 500 });
         }
-
-        response = new Response(videoResponse.body, {
-          status: videoResponse.status,
-          headers: {
-            'Content-Type': 'application/vnd.apple.mpegurl', // MIME type para M3U8
-            'Cache-Control': 'public, max-age=86400' // Cache por 24 horas
-          }
-        });
         ctx.waitUntil(cache.put(cacheKey, response.clone()));
       }
 
