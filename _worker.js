@@ -10,27 +10,27 @@ export default {
       const animeName = match[1];
       const ep = match[2];
 
-      // Construir a URL real
+      // Construir a URL real do M3U8
       const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2F${ep}.m3u8?alt=media`;
 
       try {
-        // Fetch the content from the real URL
+        // Buscar o conteúdo do M3U8 original
         const response = await fetch(realUrl);
-
         if (!response.ok) {
-          return new Response('Error fetching content', { status: response.status });
+          return new Response('Erro ao buscar o M3U8', { status: 500 });
         }
 
-        // Return the fetched content with the original status and headers
-        return new Response(response.body, {
-          status: response.status,
+        const m3u8Content = await response.text();
+
+        // Retornar o conteúdo do M3U8
+        return new Response(m3u8Content, {
+          status: 200,
           headers: {
-            'Content-Type': response.headers.get('Content-Type') || 'application/vnd.apple.mpegurl',
-            'Cache-Control': 'public, max-age=86400' // Cache for 24 hours
+            'Content-Type': 'application/vnd.apple.mpegurl'
           }
         });
       } catch (error) {
-        return new Response('Error fetching content', { status: 500 });
+        return new Response('Erro interno', { status: 500 });
       }
     }
 
