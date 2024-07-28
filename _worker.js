@@ -30,7 +30,7 @@ export default {
           }
         });
       } catch (error) {
-        return new Response('Error', { status: 500 });
+        return new Response('Error fetching content', { status: 500 });
       }
     }
 
