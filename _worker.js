@@ -13,25 +13,8 @@ export default {
       // Construir a URL real
       const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2F${ep}.m3u8?alt=media`;
 
-      try {
-        // Fazer a solicitação para a URL real
-        const videoResponse = await fetch(realUrl);
-
-        if (!videoResponse.ok) {
-          return new Response('Video fetch error.', { status: 500 });
-        }
-
-        // Retornar a resposta diretamente, preservando os headers e o corpo
-        return new Response(videoResponse.body, {
-          status: videoResponse.status,
-          headers: {
-            ...videoResponse.headers,
-            'Content-Type': 'application/vnd.apple.mpegurl' // Defina o Content-Type apropriado
-          }
-        });
-      } catch (error) {
-        return new Response(`Error fetching video: ${error.message}`, { status: 500 });
-      }
+      // Redirecionar para a URL real
+      return Response.redirect(realUrl, 302);
     }
 
     // Deixa outras requisições serem tratadas pelo Cloudflare Pages e _redirects
