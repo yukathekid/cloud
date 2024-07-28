@@ -13,10 +13,10 @@ export default {
       // Construir a URL real
       const realUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${animeName}%2F${ep}.m3u8?alt=media`;
 
-      // Fazer o redirecionamento
       try {
+        // Fazer a solicitação para a URL real
         const videoResponse = await fetch(realUrl);
-        
+
         if (!videoResponse.ok) {
           return new Response('Video fetch error.', { status: 500 });
         }
