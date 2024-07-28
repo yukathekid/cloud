@@ -24,7 +24,10 @@ export default {
         // Retornar a resposta diretamente, preservando os headers e o corpo
         return new Response(videoResponse.body, {
           status: videoResponse.status,
-          headers: videoResponse.headers
+          headers: {
+            ...videoResponse.headers,
+            'Content-Type': 'application/vnd.apple.mpegurl' // Defina o Content-Type apropriado
+          }
         });
       } catch (error) {
         return new Response(`Error fetching video: ${error.message}`, { status: 500 });
