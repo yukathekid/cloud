@@ -16,11 +16,20 @@ export default {
         // Faz a solicitação para a URL real
         const response = await fetch(firebaseUrl);
 
-        // Retorna a resposta do Firebase Storage
+        if (!response.ok) {
+            return new Response('Erro ao buscar o vídeo', { status: response.status });
+        }
+
+        // Copia os headers da resposta original e adiciona headers adicionais
+        const newHeaders = new Headers(response.headers);
+        newHeaders.set('Content-Type', 'application/vnd.apple.mpegurl');
+        newHeaders.set('Access-Control-Allow-Origin', '*');
+
+        // Retorna a resposta do Firebase Storage com os headers ajustados
         return new Response(response.body, {
             status: response.status,
             statusText: response.statusText,
-            headers: response.headers
+            headers: newHeaders
         });
     }
 
