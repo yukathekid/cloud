@@ -5,14 +5,15 @@ export default {
     const pathname = url.pathname;
 
     // Verifica se o caminho corresponde ao padrão de arquivo .ts
-    let match = pathname.match(/^\/cdn\/([^\/]+)\/(\d+)\/([^\/]+)$/);
+    let match = pathname.match(/^\/cdn\/([^\/]+)\/(s\d+)\/(\d+)\/([^\/]+)$/);
     if (match) {
         const animeName = match[1];
-        const folder = match[2];
-        const tsFile = match[3];
+        const season = match[2];
+        const ep = match[3];
+        const tsFile = match[4];
 
         // Constrói a URL real do Firebase Storage para .ts
-        const firebaseUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${encodeURIComponent(animeName)}%2F${folder}%2F${encodeURIComponent(tsFile)}?alt=media`;
+        const firebaseUrl = `https://firebasestorage.googleapis.com/v0/b/anikodi-cdn.appspot.com/o/${encodeURIComponent(animeName)}%2F${encodeURIComponent(season)}%2F${encodeURIComponent(ep)}%2F${encodeURIComponent(tsFile)}?alt=media`;
 
         // Faz a solicitação para a URL real
         const response = await fetch(firebaseUrl);
@@ -35,13 +36,14 @@ export default {
     }
 
     // Verifica se o caminho corresponde ao padrão de arquivo .m3u8
-    match = pathname.match(/^\/cdn\/([^\/]+)\/(\d+)\.m3u8$/);
+    match = pathname.match(/^\/cdn\/([^\/]+)\/(s\d+)\/(\d+)\.m3u8$/);
     if (match) {
         const animeName = match[1];
-        const ep = match[2];
+        const season = match[2];
+        const ep = match[3];
 
         // Constrói a URL real do Firebase Storage para .m3u8
-        const firebaseUrl = `https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Anikodi%2F${encodeURIComponent(animeName)}%2F${encodeURIComponent(ep)}.m3u8?alt=media`;
+        const firebaseUrl = `https://firebasestorage.googleapis.com/v0/b/anikodi-cdn.appspot.com/o/${encodeURIComponent(animeName)}%2F${encodeURIComponent(season)}%2F${encodeURIComponent(ep)}.m3u8?alt=media`;
 
         // Faz a solicitação para a URL real
         const response = await fetch(firebaseUrl);
