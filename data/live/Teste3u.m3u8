@@ -1,0 +1,53 @@
+#EXTM3U
+
+#EXTINF:-1 tvg-id="" tvg-name="HotWheels Via 35 - A corrida mundial" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Fvia35.png?alt=media&token=e4c2229b-2e26-441e-b8e8-b3597cb044d1" group-title="HOTWHEELLS",Via 35 - A corrida mundial
+
+https://a3.mp4upload.com:183/d/xsx6plmiz3b4quuorsrewjsxlbecbpz2ficb5uqtkkfh3sezq7zipknnmrmfhau5lvgmpcca/video.mp4
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="Ignição" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Fignicao.jpg?alt=media&token=5b2207ac-acf4-4e48-9b1e-973a1da072e3" group-title="HOTWHEELS",Ignição
+
+https://xn--orbjmdo5s6yer3zo8n54vcpxzowgi7n87xdtauvacfed983n3dbm-694brl.gc4d1o1kmu0ujc9uulvt8sz4e2t84ck0z7uvrzkbe2stjvfds1fdrfwumcbno8s.foo/V/RCServer04/ondemand/SUTST04EP08.mp4?nu3zAQc9HC3GbwJq=1722126128-Ojr43TeBuflgL0703p97WyKg5b9BQ2FB5dnuIlsCk3M%3D
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="A velocidade do silêncio" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Favelocidadedosilencio.jpg?alt=media&token=7e45e431-e555-42b3-abaa-95b65c034013" group-title="HOTWHEELS",A velocidade do silêncio
+
+https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Hotwheels%20Filmes%2F%5B4K%20REMASTERIZADO%5D%20ACCELERACERS%202.0%20-%20A%20Velocidade%20do%20Silencio.mp4?alt=media&token=e4b1a239-791f-4a5e-a466-e9a834c4f3a9
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="Ponto de Ruptura" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Fpontoderuptura.jpg?alt=media&token=e3437127-8689-4192-bd13-aab5deea0dc5" group-title="HOTWHEELS",Ponto de Ruptura
+
+https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Hotwheels%20Filmes%2F%5B4K%20REMASTERIZADO%5D%20ACCELERACERS%203.0%20-%20Ponto%20de%20Ruptura.mp4?alt=media&token=5d9315d4-425f-4e43-b0b2-477076ed5236
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="A corrida final" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Facorridafinal.jpg?alt=media&token=aa796fdd-6054-4cd7-b1e8-576390bf4058" group-title="HOTWHEELS",A corrida final
+
+https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/Hotwheels%20Filmes%2F%5B4K%20REMASTERIZADO%5D%20ACCELERACERS%204.0%20-%20A%20Corrida%20Final.mp4?alt=media&token=cd2b137c-5da9-4270-8081-55235554eeaf
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="A corrida final" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Facorridafinal.jpg?alt=media&token=aa796fdd-6054-4cd7-b1e8-576390bf4058" group-title="HOTWHEELS",PARAMOUNT
+
+http://170.82.200.38:8080/paramount/tracks-v1a1/index.m3u8
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="A corrida final" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Facorridafinal.jpg?alt=media&token=aa796fdd-6054-4cd7-b1e8-576390bf4058" group-title="HOTWHEELS",StarChannel
+
+http://170.82.200.38:8080/star_channel/tracks-v1a1/index.m3u8
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="A corrida final" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Facorridafinal.jpg?alt=media&token=aa796fdd-6054-4cd7-b1e8-576390bf4058" group-title="HOTWHEELS",Testea
+
+http://170.82.200.35/espn_brasil/tracks-v1a1/mono.m3u8
+
+
+
+#EXTINF:-1 tvg-id="" tvg-name="A corrida final" tvg-logo="https://firebasestorage.googleapis.com/v0/b/hwfilm23.appspot.com/o/img%2Facorridafinal.jpg?alt=media&token=aa796fdd-6054-4cd7-b1e8-576390bf4058" group-title="HOTWHEELS",Hogo
+
+https://server101.shop/ufc/tracks-v1a1/mono.m3u8?remote=45.161.253.95&token=5ab47fd3c462106786c8443bc263d2827107a341-58d19da5342baa43bec9e7216c2deb31-1694646888-1694643288
