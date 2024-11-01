@@ -6,7 +6,7 @@ export default {
 
     // Verifica se o caminho corresponde ao padrão de arquivo .ts
     let match = pathname.match(/^\/cdn\/([^\/]+)\/(s\d+)\/(\d+)\/([^\/]+)$/);
-    if (match) {
+    /*if (match) {
         const animeName = match[1];
         const season = match[2];
         const ep = match[3];
@@ -33,7 +33,7 @@ export default {
             statusText: response.statusText,
             headers: newHeaders
         });
-    }
+    }*/
 
     // Verifica se o caminho corresponde ao padrão de arquivo .m3u8
     match = pathname.match(/^\/cdn\/([^\/]+)\/(s\d+)\/(\d+)\.m3u8$/);
